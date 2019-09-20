@@ -12,14 +12,12 @@ import model.EmployeesDAO;
 /**
  * Servlet implementation class IndexServlet
  */
-@WebServlet("/index")
+@WebServlet({"/","/index"})
 public class IndexServlet extends HttpServlet {
-	EmployeesDAO employeesDAO;
+	private EmployeesDAO employeesDAO;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		this.employeesDAO = new EmployeesDAO();
-		int rowCount = employeesDAO.getEmployeesCount();
-		request.setAttribute("rowCount", rowCount);
 		request.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(request, response);
 	}
 

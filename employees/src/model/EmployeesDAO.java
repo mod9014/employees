@@ -1,23 +1,34 @@
 package model;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.sun.org.apache.regexp.internal.recompile;
+import vo.Employees;
 
 public class EmployeesDAO {
-	public int getEmployeesCount() {
-		int count = 0;
-		String sql = "SELECT COUNT(*) FROM employees";
+	public List<Employees> selectEmplyeesList(int limit) {
+		String sql = "SELECT emp_no, birth_date, first_name, last_name, gender, hire_date FROM employees LIMIT ?";
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
+		List<Employees> list = new ArrayList<Employees>();
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/employees", "root", "java1234");
 			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1,limit);
 			rs = stmt.executeQuery();
-			if(rs.next()) {
-				count = rs.getInt("COUNT(*)");
+			
+			while(rs.next()) {
+				Employees employees = new Employees();
+				employees.setEmpNo(rs.getInt("emp_no"));
+				employees.setBirthDate(rs.getString("birth_date"));
+				employees.setFirstName(rs.getString("first_name"));
+				employees.setLastName(rs.getString("last_name"));
+				employees.setGender(rs.getString("gender"));
+				employees.setHireDate(rs.getString("hire_date"));
+				list.add(employees);
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -30,6 +41,6 @@ public class EmployeesDAO {
 				e.printStackTrace();
 			}
 		}
-		return count;
+		return list;
 	}
 }
