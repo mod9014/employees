@@ -9,7 +9,7 @@
 </head>
 <body>
 	<h1>사원목록</h1>
-	<form method = "get" action = "${pageContext.request.contextPath}/employees/getEmployeesList"">
+	<%-- <form method = "get" action = "${pageContext.request.contextPath}/employees/getEmployeesList"">
 		<select name = limit>
 			<option value = "10">10</option>
 			<option value = "20">20</option>
@@ -18,7 +18,7 @@
 			<option value = "50">50</option>
 		</select>
 		<button type = "submit">변경</button>
-	</form>
+	</form> --%>
 	<table border = "1">
 		<thead>
 			<tr>
