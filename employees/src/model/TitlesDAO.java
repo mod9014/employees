@@ -4,42 +4,29 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import db.DBHelper;
 import vo.Employees;
+import vo.Titles;
 
 public class TitlesDAO {
-	public List<Employees> selectEmplyeesList(int limit) {
-		String sql = "SELECT emp_no, birth_date, first_name, last_name, gender, hire_date FROM employees LIMIT ?";
+	public List<String> selectTitlesListDistinct() {
+		String sql = "SELECT DISTINCT title FROM titles";
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		List<Employees> list = new ArrayList<Employees>();
+		List<String> list = new ArrayList<String>();
 		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/employees", "root", "java1234");
+			conn = DBHelper.getConnection();
 			stmt = conn.prepareStatement(sql);
-			stmt.setInt(1,limit);
 			rs = stmt.executeQuery();
 			
 			while(rs.next()) {
-				Employees employees = new Employees();
-				employees.setEmpNo(rs.getInt("emp_no"));
-				employees.setBirthDate(rs.getString("birth_date"));
-				employees.setFirstName(rs.getString("first_name"));
-				employees.setLastName(rs.getString("last_name"));
-				employees.setGender(rs.getString("gender"));
-				employees.setHireDate(rs.getString("hire_date"));
-				list.add(employees);
+				list.add(rs.getString("title"));
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
-			try {
-				rs.close();
-				stmt.close();
-				conn.close();
-			}catch(Exception e) {
-				e.printStackTrace();
-			}
+			DBHelper.close(rs, stmt, conn);
 		}
 		return list;
 	}
@@ -50,8 +37,7 @@ public class TitlesDAO {
 		ResultSet rs = null;
 		String sql = "SELECT COUNT(*) cnt FROM titles";
 		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/employees", "root", "java1234");
+			conn = DBHelper.getConnection();			
 			stmt = conn.prepareStatement(sql);
 			rs = stmt.executeQuery();
 			if(rs.next()) {
@@ -60,13 +46,7 @@ public class TitlesDAO {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
-			try {
-				rs.close();
-				stmt.close();
-				conn.close();
-			}catch(Exception e) {
-				e.printStackTrace();
-			}
+			DBHelper.close(rs, stmt, conn);
 		}
 		return titlesRowCount;
 	}

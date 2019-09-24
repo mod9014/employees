@@ -30,10 +30,6 @@ public class GetEmployeesListServlet extends HttpServlet {
 		
 		List<Employees> list = (List<Employees>)employeesDAO.selectEmplyeesList(limit);
 		request.setAttribute("list", list);
-		list.get(0).getFirstName();
-		list.get(2).getFirstName();
-		list.get(3).getFirstName();
-		list.get(4).getFirstName();
 		request.getRequestDispatcher("/WEB-INF/views/employees/employeesList.jsp").forward(request, response);
 		
 	}

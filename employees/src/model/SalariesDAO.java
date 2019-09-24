@@ -2,46 +2,39 @@ package model;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import db.DBHelper;
 import vo.Employees;
 
 public class SalariesDAO {
-	public List<Employees> selectEmplyeesList(int limit) {
-		String sql = "SELECT emp_no, birth_date, first_name, last_name, gender, hire_date FROM employees LIMIT ?";
+	public Map<String, Long> selectSalariesStatistics(){
+		Map<String , Long> map = new HashMap<String, Long>();
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		List<Employees> list = new ArrayList<Employees>();
+		String sql = "SELECT COUNT(salary), SUM(salary), AVG(salary), MAX(salary), MIN(salary), STD(salary) FROM salaries";
 		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/employees", "root", "java1234");
+			conn = DBHelper.getConnection();
 			stmt = conn.prepareStatement(sql);
-			stmt.setInt(1,limit);
 			rs = stmt.executeQuery();
-			
-			while(rs.next()) {
-				Employees employees = new Employees();
-				employees.setEmpNo(rs.getInt("emp_no"));
-				employees.setBirthDate(rs.getString("birth_date"));
-				employees.setFirstName(rs.getString("first_name"));
-				employees.setLastName(rs.getString("last_name"));
-				employees.setGender(rs.getString("gender"));
-				employees.setHireDate(rs.getString("hire_date"));
-				list.add(employees);
+			if(rs.next()) {
+				map.put("count",rs.getLong("COUNT(salary)"));
+				map.put("sum",rs.getLong("SUM(salary)"));
+				map.put("avg",rs.getLong("AVG(salary)"));
+				map.put("max",rs.getLong("MAX(salary)"));
+				map.put("min",rs.getLong("MIN(salary)"));
+				map.put("std",rs.getLong("STD(salary)"));
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
-			try {
-				rs.close();
-				stmt.close();
-				conn.close();
-			}catch(Exception e) {
-				e.printStackTrace();
-			}
+			DBHelper.close(rs, stmt, conn);
 		}
-		return list;
+		
+		return map;
 	}
 	public int selectSalariesRowCount() {
 		int salariesRowCount = 0;
@@ -50,8 +43,7 @@ public class SalariesDAO {
 		ResultSet rs = null;
 		String sql = "SELECT COUNT(*) cnt FROM salaries";
 		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/employees", "root", "java1234");
+			conn = DBHelper.getConnection();
 			stmt = conn.prepareStatement(sql);
 			rs = stmt.executeQuery();
 			if(rs.next()) {
@@ -60,13 +52,7 @@ public class SalariesDAO {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
-			try {
-				rs.close();
-				stmt.close();
-				conn.close();
-			}catch(Exception e) {
-				e.printStackTrace();
-			}
+			DBHelper.close(rs, stmt, conn);
 		}
 		return salariesRowCount;
 	}

@@ -21,6 +21,7 @@ public class GetEmployeesListOrderByServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String order = "asc";
+		
 		this.employeesDAO = new EmployeesDAO();
 		if(request.getParameter("order")!=null) {
 			order = request.getParameter("order");
