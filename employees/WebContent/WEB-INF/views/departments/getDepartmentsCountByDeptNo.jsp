@@ -13,14 +13,16 @@
 		<thead>
 			<tr>
 				<th>부서번호</th>
-				<th>부서번호</th>
+				<th>부서이름</th>
+				<th>사원 수</th>
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach var = "departments" items="${list }">
+			<c:forEach var = "list" items="${list }">
 				<tr>
-					<td>${departments.getDeptNo()}</td>
-					<td>${departments.getDeptName()}</td>
+					<td>${list.dept.deptNo}</td>
+					<td>${list.dept.deptName}</td>
+					<td>${list.count}</td>
 				</tr>
 			</c:forEach>
 		</tbody>

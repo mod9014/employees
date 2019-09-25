@@ -43,5 +43,6 @@
 			</c:forEach>
 		</tbody>
 	</table>
+	<button onclick = "location.href='${pageContext.request.contextPath}/'">Home</button>
 </body>
 </html>

@@ -9,8 +9,8 @@
 </head>
 <body>
 	<h1>사원목록</h1>
-	<form method = "get" action = "${pageContext.request.contextPath}/employees/getEmployeesList">
-		<select name = limit>
+	<form method = "post" action = "${pageContext.request.contextPath}/employees/getEmployeesListByPage">
+		<select name = rowPerPage>
 			<option value = "10">10</option>
 			<option value = "20">20</option>
 			<option value = "30">30</option>
@@ -43,6 +43,20 @@
 			</c:forEach>
 		</tbody>
 	</table>
+	<div>
+	<c:if test="${currentPage>1}">
+		<button onclick = "location.href='${pageContext.request.contextPath}/employees/getEmployeesListByPage?currentPage=${currentPage-10}'">이전</button>
+	</c:if>
+	<c:forEach var = "i" begin="1" end="10" step="1">
+		<a href = "${pageContext.request.contextPath}/employees/getEmployeesListByPage?currentPage=${i+(pageList*10)}">${i+(pageList*10)}</a>
+		
+	</c:forEach>
+	<c:if test="${currentPage < lastPage}">
+		<button onclick = "location.href='${pageContext.request.contextPath}/employees/getEmployeesListByPage?currentPage=${currentPage+10}'">다음</button>
+	</c:if>
+	총 <c:out value="${lastPage}"/> 페이지
+	</div>
+	<br>
 	<button onclick = "location.href='${pageContext.request.contextPath}/'">Home</button>
 </body>
 </html>
